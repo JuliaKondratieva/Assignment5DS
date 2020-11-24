@@ -1,0 +1,31 @@
+syntax = "proto3";
+option java_multiple_files = true;
+package com.julieandco.bookcrossing.grpc;
+
+message BookRequestToAdd {
+  string title = 1;
+  string author=2;
+  int32 year=3;
+  double rating=4;
+  string genre=5;
+}
+message BookRequestToGet {
+  string title = 1;
+}
+
+message BookResponseGet {
+  string title = 1;
+  UUID id =2;
+}
+
+message UUID {
+  string idvalue = 1;
+}
+message BookResponseAdded {
+  string info = 1;
+}
+
+service BookProtoService {
+  rpc bookRAdd(BookRequestToAdd) returns (BookResponseAdded);
+  rpc bookRGet(BookRequestToGet) returns (BookResponseGet);
+}
