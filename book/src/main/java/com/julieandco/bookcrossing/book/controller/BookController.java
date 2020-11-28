@@ -28,7 +28,7 @@ public class BookController {
         List<Book> books = bookService.getAllBooks();
         for(Book b: books){
             System.out.println("BID: "+b.getId().toString());
-            BookDTO bookDTO = new BookDTO(b.getId(), b.getTitle(), b.getAuthor(), b.getYear(), b.getRating(), b.getGenre());
+            BookDTO bookDTO = new BookDTO(b.getId(), b.getTitle(), b.getAuthor(), (int) b.getYear(), b.getRating(), b.getGenre());
             booksDTO.getBooks().add(bookDTO);
         }
         return booksDTO;
@@ -39,7 +39,7 @@ public class BookController {
         String title = bookDTO.getTitle();
         String author=bookDTO.getAuthor();
         Genre genre = bookDTO.getGenre();
-        long year =bookDTO.getYear();
+        int year = (int) bookDTO.getYear();
         double rating=bookDTO.getRating();
         Book newBook = new Book(title, author, year, rating, genre);
         bookService.addBook(newBook);

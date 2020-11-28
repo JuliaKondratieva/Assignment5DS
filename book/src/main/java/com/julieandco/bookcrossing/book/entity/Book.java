@@ -15,7 +15,7 @@ public class Book {
     @Column
     private String author;
     @Column
-    private long year;
+    private int year;
     @Column
     private double rating;
     @Column
@@ -26,7 +26,7 @@ public class Book {
 
     }
 
-    public Book(String title, String author, long year, double rating, Genre genre){
+    public Book(String title, String author, int year, double rating, Genre genre){
         this.title=title;
         this.author=author;
         this.year=year;
@@ -50,7 +50,7 @@ public class Book {
         this.genre = genre;
     }
 
-    public void setYear(long year) {
+    public void setYear(int year) {
         this.year = year;
     }
 
@@ -70,7 +70,7 @@ public class Book {
         return rating;
     }
 
-    public long getYear(){
+    public int getYear(){
         return year;
     }
 

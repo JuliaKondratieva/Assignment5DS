@@ -15,9 +15,12 @@ import java.io.IOException;
 @SpringBootApplication
 public class BookApplication {
 
-	public static void main(String[] args)
+	public static void main(String[] args){
+		SpringApplication.run(BookApplication.class, args);
+	}
+}
 		//{SpringApplication.run(BookApplication.class, args);
-		throws IOException, InterruptedException {
+		/*throws IOException, InterruptedException {
 
 		Server server = ServerBuilder
 				.forPort(8001)
@@ -25,5 +28,5 @@ public class BookApplication {
 
 		server.start();
 		server.awaitTermination();
-	}
-}
+	}*/
+

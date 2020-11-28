@@ -8,13 +8,13 @@ public class BookDTO {
     private UUID id;
     private String title;
     private String author;
-    private long year;
+    private int year;
     private double rating;
     private Genre genre;
 
     public BookDTO(){}
 
-    public BookDTO(UUID id, String title, String author, long year, double rating, Genre genre){
+    public BookDTO(UUID id, String title, String author, int year, double rating, Genre genre){
         this.id = id;
         this.title=title;
         this.author=author;
@@ -47,7 +47,7 @@ public class BookDTO {
         this.genre = genre;
     }
 
-    public void setYear(long year) {
+    public void setYear(int year) {
         this.year = year;
     }
 
