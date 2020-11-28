@@ -1,0 +1,29 @@
+syntax = "proto3";
+option java_multiple_files = true;
+package com.julieandco.bookcrossing.grpc;
+
+message OrderRequestToAdd {
+  string book = 1;
+  string customer=2;
+}
+message OrderRequestToGet {
+  string book = 1;
+}
+
+message OrderResponseGet {
+  string id = 1;
+  string book=2;
+  string customer=3;
+  string date_fr=4;
+  string date_due=5;
+  string status=6;
+}
+
+message OrderResponseAdded {
+  string info = 1;
+}
+
+service OrderService {
+  rpc orderAdd(OrderRequestToAdd) returns (OrderResponseAdded);
+  rpc orderGet(OrderRequestToGet) returns (OrderResponseGet);
+}
