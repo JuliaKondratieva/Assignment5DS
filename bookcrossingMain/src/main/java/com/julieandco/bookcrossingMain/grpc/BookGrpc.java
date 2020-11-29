@@ -9,7 +9,7 @@ import io.grpc.ManagedChannelBuilder;
 
 public class BookGrpc {
 public void postingBook(String title, String author, int year, float rating, Genre g){
-    ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 8091)
+    ManagedChannel channel = ManagedChannelBuilder.forAddress("bookcrossingmediator", 8091)
             .usePlaintext()
             .build();
 

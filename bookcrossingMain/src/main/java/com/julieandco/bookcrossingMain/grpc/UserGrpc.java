@@ -7,7 +7,7 @@ import io.grpc.ManagedChannelBuilder;
 
 public class UserGrpc {
     public void postingUser(String username){
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 8091)
+        ManagedChannel channel = ManagedChannelBuilder.forAddress("bookcrossingmediator", 8091)
                 .usePlaintext()
                 .build();
 
