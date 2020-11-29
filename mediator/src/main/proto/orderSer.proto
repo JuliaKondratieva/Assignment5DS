@@ -10,20 +10,39 @@ message OrderRequestToGet {
   string book = 1;
 }
 
+message OrderRequestToDelete {
+  string book = 1;
+}
+
+message OrderRequestToUpdate {
+  string book = 1;
+}
+
 message OrderResponseGet {
   string id = 1;
   string book=2;
   string customer=3;
   string date_fr=4;
   string date_due=5;
-  string status=6;
+  bool status=6;
+  bool delivered=7;
 }
 
 message OrderResponseAdded {
   string info = 1;
 }
 
+message OrderResponseDeleted {
+  string info = 1;
+}
+
+message OrderResponseUpdated {
+  string info = 1;
+}
+
 service OrderService {
   rpc orderAdd(OrderRequestToAdd) returns (OrderResponseAdded);
   rpc orderGet(OrderRequestToGet) returns (OrderResponseGet);
+  rpc orderDelete(OrderRequestToDelete) returns (OrderResponseDeleted);
+  rpc orderUpdate(OrderRequestToUpdate) returns (OrderResponseUpdated);
 }
