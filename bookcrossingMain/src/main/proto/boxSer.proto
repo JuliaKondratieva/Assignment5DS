@@ -1,0 +1,34 @@
+syntax = "proto3";
+option java_multiple_files = true;
+package com.julieandco.bookcrossing.grpc;
+
+message BoxRequestToAddBook {
+  string book = 1;
+  string box=2;
+}
+message BoxRequestToGetBook {
+  string book = 1;
+  string box=2;
+}
+
+message BoxResponseGetBook {
+  string info = 1;
+}
+
+message BoxResponseAddedBook {
+  string info = 1;
+}
+
+message BoxRequestToAdd {
+  string address = 1;
+}
+
+message BoxResponseAdded {
+  string info = 1;
+}
+
+service BoxService {
+  rpc bookCheckIn(BoxRequestToAddBook) returns (BoxResponseAddedBook);
+  rpc bookCheckOut(BoxRequestToGetBook) returns (BoxResponseGetBook);
+  rpc boxRAdd(BoxRequestToAdd) returns (BoxResponseAdded);
+}
