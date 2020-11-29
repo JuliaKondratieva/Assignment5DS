@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookcrossingbox
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bookcrossingbox
+  template:
+    metadata:
+      labels:
+        app: bookcrossingbox
+    spec:
+      hostNetwork: true
+      containers:
+        - image: box:0.0.1-SNAPSHOT
+          name: bookcrossingbox
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8004
+              name: rest-port-b
+            - containerPort: 8014
+              name: grpc-port-b

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bookcrossingbox
+spec:
+  type: ClusterIP
+  ports:
+    - name: rest
+      port: 8004
+      targetPort: 8004
+    - name: grpc
+      port: 8014
+      targetPort: 8014
+  selector:
+    app: bookcrossingbox
