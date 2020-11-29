@@ -58,6 +58,7 @@ public class BoxSerImpl extends BoxServiceGrpc.BoxServiceImplBase {
         channel2.shutdown();
         if(!bResponseGot.getTitle().equals("null"))
             foundBook=UUID.fromString(bResponseGot.getId());
+        System.out.println("BOOKUID="+foundBook.toString());
         GenreDTO g;
         String genre=bResponseGot.getGenre();
         if(genre.equals("Fantasy"))
@@ -114,6 +115,17 @@ public class BoxSerImpl extends BoxServiceGrpc.BoxServiceImplBase {
             boxService.checkOut(foundBox, bookDTO);
             System.out.println("FOUNDBOOK IS NOT NULL");
         }
+        String info = new StringBuilder()
+                .append("Book ")
+                .append(request.getBook())
+                .append(" is removed from box ")
+                .append(request.getBox())
+                .toString();
+        BoxResponseGetBook response = BoxResponseGetBook.newBuilder()
+                .setInfo(info)
+                .build();
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
     }
 
     @Override
