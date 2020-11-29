@@ -10,7 +10,7 @@ import net.devh.boot.grpc.server.service.GrpcService;
 public class BookorderGrpcController extends OrderServiceGrpc.OrderServiceImplBase {
     @Override
     public void orderAdd(OrderRequestToAdd request, StreamObserver<OrderResponseAdded> responseObserver){
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 8013)
+        ManagedChannel channel = ManagedChannelBuilder.forAddress("bookcrossingorder", 8013)
                 .usePlaintext()
                 .build();
         OrderServiceGrpc.OrderServiceBlockingStub stub = OrderServiceGrpc.newBlockingStub(channel);
@@ -22,7 +22,7 @@ public class BookorderGrpcController extends OrderServiceGrpc.OrderServiceImplBa
 
     @Override
     public void orderGet(OrderRequestToGet request, StreamObserver<OrderResponseGet> responseObserver){
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 8013)
+        ManagedChannel channel = ManagedChannelBuilder.forAddress("bookcrossingorder", 8013)
                 .usePlaintext()
                 .build();
         OrderServiceGrpc.OrderServiceBlockingStub stub = OrderServiceGrpc.newBlockingStub(channel);

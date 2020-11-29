@@ -17,7 +17,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/bookorders")
 public class BookorderController {
-    private static final String URL = "http://localhost:8003";
+    private static final String URL = "http://bookcrossingorder:8003";
     private static final RestTemplate restTemplate = new RestTemplate();
     private static final HttpHeaders headers = new HttpHeaders();
     private static final HttpEntity<Object> headersEntity = new HttpEntity<>(headers);

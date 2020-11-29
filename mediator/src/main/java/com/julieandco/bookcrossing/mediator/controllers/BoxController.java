@@ -19,8 +19,8 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/api/boxes")
 public class BoxController {
-    private static final String URL = "http://localhost:8004";
-    private static final String URLO = "http://localhost:8003";
+    private static final String URL = "http://bookcrossingbox:8004";
+    private static final String URLO = "http://bookcrossingorder:8003";
     private static final RestTemplate restTemplate = new RestTemplate();
     private static final HttpHeaders headers = new HttpHeaders();
     private static final HttpEntity<Object> headersEntity = new HttpEntity<>(headers);

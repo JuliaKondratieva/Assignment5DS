@@ -11,7 +11,7 @@ public class CustomerGrpcController extends UserServiceGrpc.UserServiceImplBase 
     @Override
     public void customerAdd(
             UserRequestToAdd request, StreamObserver<UserResponseAdded> responseObserver) {
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 8012)
+        ManagedChannel channel = ManagedChannelBuilder.forAddress("bookcrossingcust", 8012)
                 .usePlaintext()
                 .build();
         UserServiceGrpc.UserServiceBlockingStub stub = UserServiceGrpc.newBlockingStub(channel);
@@ -24,7 +24,7 @@ public class CustomerGrpcController extends UserServiceGrpc.UserServiceImplBase 
     @Override
     public void customerGet(
             UserRequestToGet request, StreamObserver<UserResponseGet> responseObserver) {
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 8012)
+        ManagedChannel channel = ManagedChannelBuilder.forAddress("bookcrossingcust", 8012)
                 .usePlaintext()
                 .build();
         UserServiceGrpc.UserServiceBlockingStub stub = UserServiceGrpc.newBlockingStub(channel);

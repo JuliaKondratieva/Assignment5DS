@@ -16,7 +16,7 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/api/books")
 public class BookController {
-    private static final String URL = "http://localhost:8001";
+    private static final String URL = "http://bookcrossingbook:8001";
     private static final RestTemplate restTemplate = new RestTemplate();
     private static final HttpHeaders headers = new HttpHeaders();
     private static final HttpEntity<Object> headersEntity = new HttpEntity<>(headers);

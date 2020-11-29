@@ -26,7 +26,7 @@ public class BoxGrpcController extends BoxServiceGrpc.BoxServiceImplBase {
         String book = request.getBook();
 
         System.out.println("---SENDING REQUEST TO BOXES-----");
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 8014)
+        ManagedChannel channel = ManagedChannelBuilder.forAddress("bookcrossingbox", 8014)
                 .usePlaintext()
                 .build();
         BoxServiceGrpc.BoxServiceBlockingStub stub = BoxServiceGrpc.newBlockingStub(channel);
@@ -37,7 +37,7 @@ public class BoxGrpcController extends BoxServiceGrpc.BoxServiceImplBase {
 
 
         System.out.println("SENDING REQUEST TO BOOKS");
-        ManagedChannel channel3 = ManagedChannelBuilder.forAddress("localhost", 8011)
+        ManagedChannel channel3 = ManagedChannelBuilder.forAddress("bookcrossingbook", 8011)
                 .usePlaintext()
                 .build();
         BookProtoServiceGrpc.BookProtoServiceBlockingStub stub3 = BookProtoServiceGrpc.newBlockingStub(channel3);
@@ -49,7 +49,7 @@ public class BoxGrpcController extends BoxServiceGrpc.BoxServiceImplBase {
 
         SubmitBookorderDTO foundOrder = new SubmitBookorderDTO();
         System.out.println("SENDING REQUEST TO BOOKORDERS");
-        ManagedChannel channel2 = ManagedChannelBuilder.forAddress("localhost", 8013)
+        ManagedChannel channel2 = ManagedChannelBuilder.forAddress("bookcrossingorder", 8013)
                 .usePlaintext()
                 .build();
         OrderServiceGrpc.OrderServiceBlockingStub stub2 = OrderServiceGrpc.newBlockingStub(channel2);
@@ -61,7 +61,7 @@ public class BoxGrpcController extends BoxServiceGrpc.BoxServiceImplBase {
         if(oResponseGet.getDelivered()){
             System.out.println("DELIVERY STATE=true");
             //delete order and next in order set
-            ManagedChannel channel4 = ManagedChannelBuilder.forAddress("localhost", 8013)
+            ManagedChannel channel4 = ManagedChannelBuilder.forAddress("bookcrossingorder", 8013)
                     .usePlaintext()
                     .build();
             OrderServiceGrpc.OrderServiceBlockingStub stub4 = OrderServiceGrpc.newBlockingStub(channel4);
@@ -72,7 +72,7 @@ public class BoxGrpcController extends BoxServiceGrpc.BoxServiceImplBase {
         }
         else {
             System.out.println("DELIVERY STATE=false");
-            ManagedChannel channel5 = ManagedChannelBuilder.forAddress("localhost", 8013)
+            ManagedChannel channel5 = ManagedChannelBuilder.forAddress("bookcrossingorder", 8013)
                     .usePlaintext()
                     .build();
             OrderServiceGrpc.OrderServiceBlockingStub stub5 = OrderServiceGrpc.newBlockingStub(channel5);
@@ -89,7 +89,7 @@ public class BoxGrpcController extends BoxServiceGrpc.BoxServiceImplBase {
 
     @Override
     public void bookCheckOut(BoxRequestToGetBook request, StreamObserver<BoxResponseGetBook> responseObserver){
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 8014)
+        ManagedChannel channel = ManagedChannelBuilder.forAddress("bookcrossingbox", 8014)
                 .usePlaintext()
                 .build();
         BoxServiceGrpc.BoxServiceBlockingStub stub = BoxServiceGrpc.newBlockingStub(channel);
@@ -102,7 +102,7 @@ public class BoxGrpcController extends BoxServiceGrpc.BoxServiceImplBase {
     @Override
     public void boxRAdd(
             BoxRequestToAdd request, StreamObserver<BoxResponseAdded> responseObserver){
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 8014)
+        ManagedChannel channel = ManagedChannelBuilder.forAddress("bookcrossingbox", 8014)
                 .usePlaintext()
                 .build();
         BoxServiceGrpc.BoxServiceBlockingStub stub = BoxServiceGrpc.newBlockingStub(channel);
