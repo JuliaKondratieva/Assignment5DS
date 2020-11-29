@@ -2,6 +2,7 @@ package com.julieandco.bookcrossing.bookorder.grpc;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.julieandco.bookcrossing.bookorder.entity.Bookorder;
 import com.julieandco.bookcrossing.bookorder.entity.dto.*;
 import com.julieandco.bookcrossing.bookorder.service.BookorderService;
 import com.julieandco.bookcrossing.grpc.*;
@@ -14,6 +15,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -98,6 +101,100 @@ public class BookorderSerImpl extends OrderServiceGrpc.OrderServiceImplBase {
         /////////////////////////////////////////////////////////////////////////////////////
 
         OrderResponseAdded response = OrderResponseAdded.newBuilder()
+                .setInfo(info)
+                .build();
+
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void orderGet(
+            OrderRequestToGet request, StreamObserver<OrderResponseGet> responseObserver) {
+        String bookId = request.getBook();
+        List<Bookorder> foundOrderList=bookorderService.findByBookId(UUID.fromString(bookId));
+        LocalDateTime minDate=LocalDateTime.now();
+        Bookorder foundOrder=null;
+        for(Bookorder o: foundOrderList){
+            if(o.getFromDate().isBefore(minDate)){
+                foundOrder=o;
+                minDate=o.getFromDate();
+            }
+        }
+        OrderResponseGet response;
+        if(foundOrder==null)
+        {
+            response = OrderResponseGet.newBuilder()
+                    .setBook("null")
+                    .build();
+        }
+        else
+        {
+            response = OrderResponseGet.newBuilder()
+                    .setBook(foundOrder.getBookId().toString())
+                    .setCustomer(foundOrder.getCustomerId().toString())
+                    .setDateFr(foundOrder.getFromDate().toString())
+                    .setDateDue(foundOrder.getDueDate().toString())
+                    .setDelivered(foundOrder.getDeliveryState())
+                    .setStatus(foundOrder.getSubmitted())
+                    .setId(foundOrder.getId().toString())
+                    .build();
+        }
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void orderDelete(OrderRequestToDelete request, StreamObserver<OrderResponseDeleted> responseObserver){
+        String bookId = request.getBook();
+        List<Bookorder> foundOrderList=bookorderService.findByBookId(UUID.fromString(bookId));
+        LocalDateTime minDate=LocalDateTime.now();
+        Bookorder foundOrder=null;
+        for(Bookorder o: foundOrderList){
+            if(o.getFromDate().isBefore(minDate)){
+                foundOrder=o;
+                minDate=o.getFromDate();
+            }
+        }
+        if(foundOrder!=null)
+            bookorderService.deleteOrder(foundOrder);
+
+        String info = new StringBuilder()
+                .append("Order with bookId ")
+                .append(request.getBook())
+                .append(" is deleted from db")
+                .toString();
+        OrderResponseDeleted response = OrderResponseDeleted.newBuilder()
+                .setInfo(info)
+                .build();
+
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void orderUpdate(OrderRequestToUpdate request, StreamObserver<OrderResponseUpdated> responseObserver){
+        String bookId = request.getBook();
+        List<Bookorder> foundOrderList=bookorderService.findByBookId(UUID.fromString(bookId));
+        LocalDateTime minDate=LocalDateTime.now();
+        Bookorder foundOrder=null;
+        for(Bookorder o: foundOrderList){
+            if(o.getFromDate().isBefore(minDate)){
+                foundOrder=o;
+                minDate=o.getFromDate();
+            }
+        }
+        if(foundOrder!=null) {
+            foundOrder.setDeliveryState(true);
+            bookorderService.saveOrder(foundOrder);
+        }
+
+        String info = new StringBuilder()
+                .append("Order with bookId ")
+                .append(request.getBook())
+                .append(" is updated")
+                .toString();
+        OrderResponseUpdated response = OrderResponseUpdated.newBuilder()
                 .setInfo(info)
                 .build();
 
