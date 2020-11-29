@@ -1,22 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: books
+  name: bookcrossingbook
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: bookcrossing
+      app: bookcrossingbook
   template:
     metadata:
       labels:
-        app: bookcrossing
+        app: bookcrossingbook
     spec:
       hostNetwork: true
       containers:
         - image: book:0.0.1-SNAPSHOT
-          name: books
+          name: bookcrossingbook
           imagePullPolicy: Never
           ports:
             - containerPort: 8001
-              name: books
+              name: rest-port
+            - containerPort: 8011
+              name: grpc-port
