@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bookcrossingcust
+spec:
+  type: ClusterIP
+  ports:
+    - name: rest
+      port: 8002
+      targetPort: 8002
+    - name: grpc
+      port: 8012
+      targetPort: 8012
+  selector:
+    app: bookcrossingcust

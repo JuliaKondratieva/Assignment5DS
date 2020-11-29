@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookcrossingcust
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bookcrossingcust
+  template:
+    metadata:
+      labels:
+        app: bookcrossingcust
+    spec:
+      hostNetwork: true
+      containers:
+        - image: customer:0.0.1-SNAPSHOT
+          name: bookcrossingcust
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8002
+              name: rest-port-c
+            - containerPort: 8012
+              name: grpc-port-c
