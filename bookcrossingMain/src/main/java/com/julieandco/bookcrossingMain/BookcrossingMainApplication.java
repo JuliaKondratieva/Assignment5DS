@@ -22,13 +22,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class BookcrossingMainApplication {
-	private static final String URL = "http://bookcrossingmediator:8081";
+	private static final String URL = "http://localhost:8888";
 	private static final RestTemplate restTemplate = new RestTemplate();
 	private static final HttpHeaders headers = new HttpHeaders();
 	private static final HttpEntity<Object> headersEntity = new HttpEntity<>(headers);
 	public static void main(String[] args) {
 
-		BookGrpc bookGrpc = new BookGrpc();
+		/*BookGrpc bookGrpc = new BookGrpc();
 		UserGrpc userGrpc=new UserGrpc();
 		BookorderGrpc bookorderGrpc=new BookorderGrpc();
 		BoxGrpc boxGrpc=new BoxGrpc();
@@ -42,7 +42,7 @@ public class BookcrossingMainApplication {
 		bookorderGrpc.postingOrder("Pines", "Arnold");
 		System.out.println("Ox is picking up a book");
 		boxGrpc.CheckOut("Pines", "Khreschatyk");
-		System.out.println("Checked out");
+		System.out.println("Checked out");*/
 
 
 		headers.setContentType(MediaType.APPLICATION_JSON);
