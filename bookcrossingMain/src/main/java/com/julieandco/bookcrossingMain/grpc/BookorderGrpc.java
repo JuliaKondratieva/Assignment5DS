@@ -6,7 +6,7 @@ import io.grpc.ManagedChannelBuilder;
 
 public class BookorderGrpc {
     public void postingOrder(String title, String username){
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 8888)
+        ManagedChannel channel = ManagedChannelBuilder.forAddress("127.0.0.1", 9091)
                 .usePlaintext()
                 .build();
 

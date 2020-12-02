@@ -6,7 +6,7 @@ import io.grpc.ManagedChannelBuilder;
 
 public class BoxGrpc {
     public void postingBox(String address){
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 8888)
+        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 9091)
                 .usePlaintext()
                 .build();
 
@@ -21,7 +21,7 @@ public class BoxGrpc {
     }
 
     public void CheckIn(String book, String box){
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 8888)
+        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 9091)
                 .usePlaintext()
                 .build();
 
@@ -37,7 +37,7 @@ public class BoxGrpc {
     }
 
     public void CheckOut(String book, String box){
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 8888)
+        ManagedChannel channel = ManagedChannelBuilder.forAddress("127.0.0.1", 9091)
                 .usePlaintext()
                 .build();
 
