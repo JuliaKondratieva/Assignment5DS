@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mediator
+  name: bookcrossingmediator
 spec:
   replicas: 1
   selector:
@@ -12,13 +12,17 @@ spec:
       labels:
         app: bookcrossingmediator
     spec:
-      hostNetwork: true
       containers:
         - image: mediator:0.0.1-SNAPSHOT
           name: bookcrossingmediator
           imagePullPolicy: Never
+          resources:
+            limits:
+              memory: 1Gi
+            requests:
+              memory: 512Mi
           ports:
             - containerPort: 8081
-              name: rest-port
+              name: rest-port-m
             - containerPort: 8091
-              name: grpc-port
+              name: grpc-port-m
