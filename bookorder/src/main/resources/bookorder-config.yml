@@ -5,10 +5,10 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - name: rest
+    - name: rest-port-o
       port: 8003
       targetPort: 8003
-    - name: grpc
+    - name: grpc-port-o
       port: 8013
       targetPort: 8013
   selector:

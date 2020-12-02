@@ -12,11 +12,15 @@ spec:
       labels:
         app: bookcrossingorder
     spec:
-      hostNetwork: true
       containers:
         - image: bookorder:0.0.1-SNAPSHOT
           name: bookcrossingorder
           imagePullPolicy: Never
+          resources:
+            limits:
+              memory: 1Gi
+            requests:
+              memory: 512Mi
           ports:
             - containerPort: 8003
               name: rest-port-o

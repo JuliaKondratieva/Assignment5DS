@@ -55,7 +55,7 @@ public class BookorderSerImpl extends OrderServiceGrpc.OrderServiceImplBase {
         BookDTO bookDTO=null;
 
         System.out.println("SENDING CUSTOMER REQUEST");
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 8012)
+        ManagedChannel channel = ManagedChannelBuilder.forAddress("bookcrossingcust", 8012)
                 .usePlaintext()
                 .build();
 
@@ -70,7 +70,7 @@ public class BookorderSerImpl extends OrderServiceGrpc.OrderServiceImplBase {
             customerDTO = new CustomerDTO(UUID.fromString(uResponseGot.getId()), uResponseGot.getUsername());
         }
         System.out.println("SENDING BOOK REQUEST");
-        ManagedChannel channel2 = ManagedChannelBuilder.forAddress("localhost", 8011)
+        ManagedChannel channel2 = ManagedChannelBuilder.forAddress("bookcrossingbook", 8011)
                 .usePlaintext()
                 .build();
 
