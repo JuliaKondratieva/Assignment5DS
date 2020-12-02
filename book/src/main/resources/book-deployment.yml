@@ -12,11 +12,15 @@ spec:
       labels:
         app: bookcrossingbook
     spec:
-      hostNetwork: true
       containers:
         - image: book:0.0.1-SNAPSHOT
           name: bookcrossingbook
           imagePullPolicy: Never
+          resources:
+            limits:
+              memory: 1Gi
+            requests:
+              memory: 512Mi
           ports:
             - containerPort: 8001
               name: rest-port
