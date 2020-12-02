@@ -46,7 +46,7 @@ public class BoxSerImpl extends BoxServiceGrpc.BoxServiceImplBase {
 
         UUID foundBook = null;
 
-        ManagedChannel channel2 = ManagedChannelBuilder.forAddress("localhost", 8011)
+        ManagedChannel channel2 = ManagedChannelBuilder.forAddress("bookcrossingbook", 8011)
                 .usePlaintext()
                 .build();
 
@@ -91,7 +91,7 @@ public class BoxSerImpl extends BoxServiceGrpc.BoxServiceImplBase {
         Box foundBox = boxService.findByAddress(boxAddress);
         UUID foundBook=null;
         System.out.println("SENDING BOOK REQUEST");
-        ManagedChannel channel2 = ManagedChannelBuilder.forAddress("localhost", 8011)
+        ManagedChannel channel2 = ManagedChannelBuilder.forAddress("bookcrossingbook", 8011)
                 .usePlaintext()
                 .build();
 
