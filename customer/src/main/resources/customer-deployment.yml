@@ -12,11 +12,15 @@ spec:
       labels:
         app: bookcrossingcust
     spec:
-      hostNetwork: true
       containers:
         - image: customer:0.0.1-SNAPSHOT
           name: bookcrossingcust
           imagePullPolicy: Never
+          resources:
+            limits:
+              memory: 1Gi
+            requests:
+              memory: 512Mi
           ports:
             - containerPort: 8002
               name: rest-port-c
