@@ -27,7 +27,12 @@ public class BookApplication {
 	//private final static String QUEUE_NAME = "bookqueue";
 	//@Autowired
 	//private static BookReceiver bookReceiver;
+	//@Autowired
+
 	public static void main(String[] argv) {
+		//BookService bookService=new BookService();
+		//Book b1=new Book("a", "b",20, 5, Genre.Fantasy);
+		//bookService.addBook(b1);
 		SpringApplication.run(BookApplication.class, argv);
 		/*ConnectionFactory factory = new ConnectionFactory();
 		factory.setHost("localhost");
