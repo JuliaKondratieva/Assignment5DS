@@ -25,6 +25,7 @@ public class CustomerService {
     @Transactional
     public void addUser(Customer user){
         if(customerRepository.findByUsername(user.getUsername()) == null){
+            System.out.println("NULL IN SERVICE");
             customerRepository.save(user);
         }
     }

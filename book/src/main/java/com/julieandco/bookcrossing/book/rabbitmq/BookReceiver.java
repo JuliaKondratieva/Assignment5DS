@@ -64,11 +64,6 @@ public class BookReceiver {
 
     private static final String RPC_QUEUE_NAME = "rpc_queue_book";
 
-    /*private static BookDTO findbook(BookDTO bookDTO) {
-        bookService
-        BookDTO foundbook=new BookDTO();
-        return foundbook;
-    }*/
     @PostConstruct
     public void RRPost() throws Exception {
         ConnectionFactory factory = new ConnectionFactory();
