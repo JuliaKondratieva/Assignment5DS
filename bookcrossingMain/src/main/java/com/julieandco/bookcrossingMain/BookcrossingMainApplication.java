@@ -13,9 +13,13 @@ import com.julieandco.bookcrossingMain.grpc.UserGrpc;
 import com.julieandco.bookcrossingMain.rabbitmq.BookSender;
 import com.julieandco.bookcrossingMain.rabbitmq.CustomerSender;
 import com.julieandco.bookcrossingMain.rabbitmq.OrderSender;
+import com.julieandco.bookcrossingMain.rabbitmq.Sender;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import com.julieandco.bookcrossingMain.grpc.BookGrpc;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
 import org.springframework.http.*;
 import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.web.client.RestTemplate;
@@ -28,22 +32,29 @@ import java.util.concurrent.TimeoutException;
 
 @SpringBootApplication
 public class BookcrossingMainApplication {
-	private static final String URL = "http://127.0.0.1:9081";
+	private static final String URL = "http://localhost:9081";
 	private static final RestTemplate restTemplate = new RestTemplate();
 	private static final HttpHeaders headers = new HttpHeaders();
 	private static final HttpEntity<Object> headersEntity = new HttpEntity<>(headers);
-	public static void main(String[] args) throws IOException, TimeoutException {
-		BookSender bookSender=new BookSender();
-		CustomerSender customerSender=new CustomerSender();
-		OrderSender orderSender=new OrderSender();
+	private final RabbitTemplate rabbitTemplate;
 
+	public BookcrossingMainApplication(RabbitTemplate rabbitTemplate) {
+		this.rabbitTemplate = rabbitTemplate;
+	}
+
+	public static void main(String[] args) throws Exception {
+		Sender sender=new Sender();
 		BookDTO b1=new BookDTO();
 		b1.setTitle("The Wayward Pines RAB");
 		b1.setAuthor("Blake Crouch RAB");
 		b1.setGenre(Genre.Thriller);
 		b1.setRating(8);
 		b1.setYear(2012);
-		bookSender.RRFunct(b1);
+		sender.requestRabbitmq("/api/books/save", b1);
+		//String res1=sendbook()
+
+		//bookSender.send(b1);
+		//bookSender.RRFunct(b1);
 		//bookSender.BookPost(b1);*/
 
 		/*UserDTO u1=new UserDTO("Oxlade RAB");
