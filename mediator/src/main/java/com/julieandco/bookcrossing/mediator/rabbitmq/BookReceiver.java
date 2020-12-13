@@ -11,11 +11,11 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.concurrent.TimeoutException;
-@Component
+//@Component
 public class BookReceiver {
     private final static String QUEUE_NAME = "bookqueue";
     private BookSender bookSender;
-    @PostConstruct
+    //@PostConstruct
     public void BookReceive() throws Exception {
         //BookSender bookSender=new BookSender();
         ConnectionFactory factory = new ConnectionFactory();
