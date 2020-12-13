@@ -7,6 +7,7 @@ import com.julieandco.bookcrossing.book.entity.dto.BookDTO;
 import com.julieandco.bookcrossing.book.repo.BookRepo;
 import com.julieandco.bookcrossing.book.service.BookService;
 import com.rabbitmq.client.*;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -18,12 +19,18 @@ import java.nio.charset.StandardCharsets;
 @Component
 public class BookReceiver {
     private final BookService bookService;
-    //private final BookRepo bookRepo;
     @Autowired
     public BookReceiver(BookService bookService) {
         this.bookService = bookService;
     }
     private final static String QUEUE_NAME = "bookqueue";
+
+    @RabbitListener(queues = QUEUE_NAME)
+    public void consume(BookDTO bookDTO) {
+        Book book=new Book(bookDTO.getTitle(), bookDTO.getAuthor(), (int)bookDTO.getYear(), bookDTO.getRating(), bookDTO.getGenre());
+        System.out.println("CONSUMER TRIGGERED");
+        bookService.addBook(book);
+    }
     //@PostConstruct
     /*public void BookPost() throws Exception{
         ConnectionFactory factory = new ConnectionFactory();
@@ -62,7 +69,7 @@ public class BookReceiver {
         channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> { });
     }*/
 
-    private static final String RPC_QUEUE_NAME = "rpc_queue_book";
+    /*private static final String RPC_QUEUE_NAME = "rpc_queue_book";
 
     @PostConstruct
     public void RRPost() throws Exception {
@@ -196,6 +203,6 @@ public class BookReceiver {
                 }
             }
         }
-    }
+    }*/
 }
 
