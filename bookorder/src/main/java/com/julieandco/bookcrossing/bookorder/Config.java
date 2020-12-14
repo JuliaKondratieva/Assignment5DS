@@ -1,4 +1,4 @@
-package com.julieandco.bookcrossing.customer;
+package com.julieandco.bookcrossing.bookorder;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -13,13 +13,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class Config {
     private String exchange="exchange";
-    private String routingKey="mediator.to.customer";
-    private String queue="customerqueue";
+    private String routingKey="mediator.to.order";
+    private String queue="orderqueue";
 
     @Bean
     public Queue queue() {
         return new Queue(queue, false);
     }
+
 
     @Bean
     public TopicExchange exchange() {
@@ -32,7 +33,7 @@ public class Config {
     }
 
     @Bean
-    public RabbitTemplate rabbitTemplate(final ConnectionFactory connectionFactory) {
+    public RabbitTemplate rabbitTemplate(final ConnectionFactory connectionFactory, Binding binding) {
         final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(producerJackson2MessageConverter());
         return rabbitTemplate;

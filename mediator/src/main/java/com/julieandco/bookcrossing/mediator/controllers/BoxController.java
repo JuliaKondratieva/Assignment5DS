@@ -3,6 +3,8 @@ package com.julieandco.bookcrossing.mediator.controllers;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.julieandco.bookcrossing.mediator.dto.*;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -19,6 +21,8 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/api/boxes")
 public class BoxController {
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
     private static final String URL = "http://bookcrossingbox:8004";
     private static final String URLO = "http://bookcrossingorder:8003";
     private static final RestTemplate restTemplate = new RestTemplate();
@@ -108,5 +112,15 @@ public class BoxController {
                 .exchange(URL + "/api/boxes/checkout", HttpMethod.POST, deliveryToDo, Void.class);
 
         return ResponseEntity.ok().build();
+    }
+
+    private String exchange="exchange";
+    private String routingKey="mediator.to.box";
+
+    @PostMapping("/save/rabbitmq")
+    public void sendOrderToSave(@RequestBody BoxDTO boxDTO) {
+        System.out.println("BOX CONTROLLER");
+        rabbitTemplate.convertAndSend(exchange, routingKey, boxDTO);
+        System.out.println("Sent box");
     }
 }

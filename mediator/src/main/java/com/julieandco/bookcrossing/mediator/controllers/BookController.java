@@ -49,10 +49,11 @@ public class BookController {
     //@Value("${rabbitmq.routing-key}")
     private String routingKey="mediator.to.book";
     //@Value("${rabbitmq.queue}")
-    private String queue="bookqueue";
+    //private String queue="bookqueue";
 
     @PostMapping("/save/rabbitmq")
     public void sendBookToSave(@RequestBody BookDTO bookDTO) {
+        System.out.println("BOOK CONTROLLER");
         rabbitTemplate.convertAndSend(exchange, routingKey, bookDTO);
         System.out.println("Sent book");
     }

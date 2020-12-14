@@ -10,17 +10,15 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.amqp.core.Queue;
+import org.springframework.context.annotation.Primary;
 
 @Configuration
 public class Config {
-    //@Value("${rabbitmq.exchange}")
     private String exchange="exchange";
-    //@Value("${rabbitmq.routing-key}")
     private String routingKey="mediator.to.book";
-    //@Value("${rabbitmq.queue}")
     private String queue="bookqueue";
 
-    @Bean
+    @Bean("bookqueue")
     public Queue queue() {
         return new Queue(queue, false);
     }
@@ -30,7 +28,7 @@ public class Config {
         return new TopicExchange(exchange);
     }
 
-    @Bean
+    @Bean("queuebook")
     public Binding binding(Queue queue, TopicExchange exchange) {
         return BindingBuilder.bind(queue).to(exchange).with(routingKey);
     }

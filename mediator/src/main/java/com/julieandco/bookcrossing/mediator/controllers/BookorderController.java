@@ -3,6 +3,8 @@ package com.julieandco.bookcrossing.mediator.controllers;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.julieandco.bookcrossing.mediator.dto.*;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -12,11 +14,12 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/bookorders")
 public class BookorderController {
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
     private static final String URL = "http://bookcrossingorder:8003";
     private static final RestTemplate restTemplate = new RestTemplate();
     private static final HttpHeaders headers = new HttpHeaders();
@@ -49,6 +52,17 @@ public class BookorderController {
         BookorderDTO bookorderDTO = new BookorderDTO();
         bookorderDTO.setBookorders(bookordersFromDB);
         return bookorderDTO;
+    }
+
+
+    private String exchange="exchange";
+    private String routingKey="mediator.to.order";
+
+    @PostMapping("/save/rabbitmq")
+    public void sendOrderToSave(@RequestBody SubmitBookorderDTO bookorderDTO) {
+        System.out.println("BOOKORDER CONTROLLER");
+        rabbitTemplate.convertAndSend(exchange, routingKey, bookorderDTO);
+        System.out.println("Sent order");
     }
 
 }

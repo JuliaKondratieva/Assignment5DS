@@ -1,34 +1,16 @@
 package com.julieandco.bookcrossingMain;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.julieandco.bookcrossing.grpc.BookProtoServiceGrpc;
 
 import com.julieandco.bookcrossingMain.dto.*;
 import com.julieandco.bookcrossingMain.entity.*;
 
 
-import com.julieandco.bookcrossingMain.grpc.BookorderGrpc;
-import com.julieandco.bookcrossingMain.grpc.BoxGrpc;
-import com.julieandco.bookcrossingMain.grpc.UserGrpc;
-import com.julieandco.bookcrossingMain.rabbitmq.BookSender;
-import com.julieandco.bookcrossingMain.rabbitmq.CustomerSender;
-import com.julieandco.bookcrossingMain.rabbitmq.OrderSender;
 import com.julieandco.bookcrossingMain.rabbitmq.Sender;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
-import com.julieandco.bookcrossingMain.grpc.BookGrpc;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
 import org.springframework.http.*;
-import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.web.client.RestTemplate;
 
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.io.IOException;
-import java.util.concurrent.TimeoutException;
 
 @SpringBootApplication
 public class BookcrossingMainApplication {
@@ -50,22 +32,18 @@ public class BookcrossingMainApplication {
 		b1.setGenre(Genre.Thriller);
 		b1.setRating(8);
 		b1.setYear(2012);
-		sender.requestRabbitmq("/api/books/save", b1);
-		//String res1=sendbook()
+		sender.requestBookRabbitmq(b1);
 
-		//bookSender.send(b1);
-		//bookSender.RRFunct(b1);
-		//bookSender.BookPost(b1);*/
-
-		/*UserDTO u1=new UserDTO("Oxlade RAB");
-		customerSender.UserPost(u1);
-
+		UserDTO u1=new UserDTO("Oxlade RAB");
+		sender.requestUserRabbitmq(u1);
 		SubmitOrderDTO o1=new SubmitOrderDTO();
 		o1.setBook(b1);
 		o1.setUser(u1);
-		orderSender.OrderPost(o1);*/
-
-
+		sender.requestOrderRabbitmq(o1);
+		BoxDTO box1=new BoxDTO();
+		box1.setAddress("Khreschatyk");
+		sender.requestBoxRabbitmq(box1);
+		
 		//BookGrpc bookGrpc = new BookGrpc();
 		//UserGrpc userGrpc=new UserGrpc();
 		//BookorderGrpc bookorderGrpc=new BookorderGrpc();

@@ -1,4 +1,4 @@
-package com.julieandco.bookcrossing.customer;
+package com.julieandco.bookcrossing.box;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -13,13 +13,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class Config {
     private String exchange="exchange";
-    private String routingKey="mediator.to.customer";
-    private String queue="customerqueue";
+    private String routingKey="mediator.to.box";
+    private String queue="boxqueue";
 
     @Bean
     public Queue queue() {
         return new Queue(queue, false);
     }
+
 
     @Bean
     public TopicExchange exchange() {

@@ -1,17 +1,16 @@
 package com.julieandco.bookcrossing.bookorder.rabbitmq;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.julieandco.bookcrossing.bookorder.entity.Bookorder;
 import com.julieandco.bookcrossing.bookorder.entity.dto.*;
 import com.julieandco.bookcrossing.bookorder.service.BookorderService;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.DeliverCallback;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
 import java.util.Objects;
@@ -19,81 +18,65 @@ import java.util.concurrent.TimeoutException;
 
 @Component
 public class OrderReceiver {
-
-    @Autowired
+    private static final String URL = "http://localhost:8001";
+    private static final String URLC = "http://localhost:8002";
+    private static final RestTemplate restTemplate = new RestTemplate();
+    private static final HttpHeaders headers = new HttpHeaders();
+    private static final HttpEntity<Object> headersEntity = new HttpEntity<>(headers);
     private final BookorderService bookorderService;
+    @Autowired
     public OrderReceiver(BookorderService bookorderService) {
         this.bookorderService = bookorderService;
     }
     private final static String QUEUE_NAME = "orderqueue";
-    private CustomerSender customerSender;
 
-    @PostConstruct
-    public void OrderPost() throws Exception{
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("localhost");
-        factory.setPort(5672);
-        Connection connection = factory.newConnection();
-        Channel channel = connection.createChannel();
-        channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-        System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
-        DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-            String message = new String(delivery.getBody(), "UTF-8");
-            System.out.println(" [x] Received '" + message + "'");
-            Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-            SubmitBookorderDTO orderDTO = gson.fromJson(message, SubmitBookorderDTO.class);
-            /////////////////////////////////////
-            Gson gson2 = new GsonBuilder().disableHtmlEscaping().create();
-            CustomerDTO user = orderDTO.getUser();
-            System.out.println("RECEIVED FROM JSON USER: "+user.getUsername());
+    @RabbitListener(queues = QUEUE_NAME)
+    public void consume(SubmitBookorderDTO orderDTO) {
+        System.out.println("CONSUMER TRIGGERED");
+        CustomerDTO user = orderDTO.getUser();
+        System.out.println("RECEIVED FROM JSON USER: "+user.getUsername());
 
-            BookDTO book = orderDTO.getBook();
-            System.out.println("RECEIVED FROM JSON BOOK: "+book.getTitle());
+        BookDTO book = orderDTO.getBook();
+        System.out.println("RECEIVED FROM JSON BOOK: "+book.getTitle());
+        BookDTO bookDTO=new BookDTO();
+        CustomerDTO customerDTO = new CustomerDTO();
+        boolean submitted = false;
+        boolean custFound = false;
+        System.out.println("SENDING CUSTOMER REQUEST");
 
-            BookDTO bookDTO = new BookDTO();
-            CustomerDTO customerDTO=new CustomerDTO();
-            String userResponse="";
-            boolean cusExists=true;
-            System.out.println("SENDING CUSTOMER REQUEST");
-            CustomerSender customerSender = null;
-            try {
-                customerSender = new CustomerSender();
-            } catch (TimeoutException e) {
-                e.printStackTrace();
+        ResponseEntity<CustomersDTO> response5 = restTemplate
+                .exchange(URLC + "/api/customers", HttpMethod.GET, headersEntity, CustomersDTO.class);
+
+        for (CustomerDTO c : Objects.requireNonNull(response5.getBody()).getUsers()) {
+            System.out.println("RECEIVED REQUEST: c: "+c.getUsername());
+            if(c.getUsername().equals(user.getUsername())) {
+                System.out.println("C==USER");
+                System.out.println("сID: "+ c.getId().toString());
+
+                customerDTO=c;
+                custFound=true;
+                break;
             }
-            if(customerSender!=null)
-                userResponse = customerSender.RRFunct(user);
-            else
-                cusExists=false;
+        }
+        System.out.println("SENDING BOOK REQUEST");
+        ResponseEntity<BooksDTO> response6 = restTemplate
+                .exchange(URL + "/api/books", HttpMethod.GET, headersEntity, BooksDTO.class);
 
-            System.out.println("SENDING BOOK REQUEST");
-            String bookResponse = "";
-            boolean bookExists=true;
-            BookSender bookSender = null;
-            try {
-                bookSender = new BookSender();
-            } catch (TimeoutException e) {
-                e.printStackTrace();
+        for (BookDTO b : Objects.requireNonNull(response6.getBody()).getBooks()) {
+            System.out.println("RECEIVED REQUEST: b: "+b.getTitle());
+            if(b.getTitle().equals(book.getTitle())) {
+                System.out.println("B==BOOK");
+                System.out.println("bID: "+ b.getId().toString());
+                bookDTO=b;
+                submitted=true;
+                break;
             }
-            if(bookSender!=null)
-                bookResponse = bookSender.RRFunct(book);
-            else
-                bookExists=false;
-
-            if(!bookResponse.equals(""))
-                bookDTO = gson.fromJson(bookResponse, BookDTO.class);
-            if(!userResponse.equals(""))
-                customerDTO = gson.fromJson(userResponse, CustomerDTO.class);
-
-
-            if(!bookExists)
-                System.out.println("Book doesnt exist!");
-            System.out.println("bookID "+bookDTO.getId().toString());
-            if(bookExists&&cusExists)
-                bookorderService.addOrder(bookDTO, customerDTO);
-            ////////////////////////////////////
-
-        };
-        channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> { });
+        }
+        if(!submitted)
+            System.out.println("Book doesnt exist!");
+        System.out.println("bookID "+bookDTO.getId().toString());
+        if(submitted&&custFound)
+            bookorderService.addOrder(bookDTO, customerDTO);
+        //bookorderService.addOrder(orderDTO.getBook(), orderDTO.getUser());
     }
 }

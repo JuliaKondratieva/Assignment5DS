@@ -12,18 +12,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.amqp.core.Queue;
 
-//@Configuration
-//@EnableAsync
-//public class Config {
-//}
+
 @Configuration
 public class Config {
 
-    //@Value("${rabbitmq.exchange}")
     private String exchange="exchange";
-    //@Value("${rabbitmq.routing-key}")
     private String routingKey="mediator.to.book";
-    //@Value("${rabbitmq.queue}")
     private String queue="bookqueue";
 
     @Bean
